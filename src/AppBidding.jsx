@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import LoginPage from './LoginPage'
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
+const API_BASE = import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? '' : 'http://localhost:4000')
 const SPORTS = ['All', 'Cricket']
 
 const authDefault = { name: '', email: '', password: '' }

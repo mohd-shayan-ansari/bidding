@@ -11,8 +11,10 @@ import superadminRoutes from './routes/superadminRoutes.js'
 import { errorHandler } from './middlewares/errorHandler.js'
 
 export function createApp() {
-    if (!fs.existsSync('uploads')) {
-        fs.mkdirSync('uploads', { recursive: true })
+    const uploadDir = process.env.UPLOAD_DIR || (process.env.NETLIFY ? '/tmp/uploads' : 'uploads')
+
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true })
     }
 
     const app = express()
@@ -22,7 +24,7 @@ export function createApp() {
         }),
     )
     app.use(express.json())
-    app.use('/uploads', express.static('uploads'))
+    app.use('/uploads', express.static(uploadDir))
 
     app.get('/', (_req, res) => {
         res.json({ message: 'IPL Bidding API', health: 'ok', frontend: process.env.FRONTEND_ORIGIN })

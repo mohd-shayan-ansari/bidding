@@ -14,10 +14,11 @@ import {
 import { auth } from '../middlewares/auth.js'
 
 const router = Router()
+const uploadDir = process.env.UPLOAD_DIR || (process.env.NETLIFY ? '/tmp/uploads' : 'uploads')
 
 const storage = multer.diskStorage({
     destination: (_req, _file, cb) => {
-        cb(null, 'uploads')
+        cb(null, uploadDir)
     },
     filename: (_req, file, cb) => {
         const extension = path.extname(file.originalname)
