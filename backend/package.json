@@ -5,7 +5,8 @@
     "type": "module",
     "scripts": {
         "dev": "node --watch src/index.js",
-        "start": "node src/index.js"
+        "start": "node src/index.js",
+        "build": "echo 'No build needed for Node.js backend'"
     },
     "dependencies": {
         "bcryptjs": "^3.0.2",
