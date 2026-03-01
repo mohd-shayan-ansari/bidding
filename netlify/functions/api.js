@@ -1,12 +1,19 @@
 import serverless from 'serverless-http'
-import { connectDb } from '../../backend/src/config/db.js'
-import { createApp } from '../../backend/src/app.js'
-import { seedInitialData } from '../../backend/src/utils/seed.js'
 
 let cachedHandler
 
 async function getHandler() {
     if (cachedHandler) return cachedHandler
+
+    // Ensure writable uploads path in Netlify Lambda runtime.
+    process.env.NETLIFY = process.env.NETLIFY || 'true'
+    process.env.UPLOAD_DIR = process.env.UPLOAD_DIR || '/tmp/uploads'
+
+    const [{ connectDb }, { createApp }, { seedInitialData }] = await Promise.all([
+        import ('../../backend/src/config/db.js'),
+        import ('../../backend/src/app.js'),
+        import ('../../backend/src/utils/seed.js'),
+    ])
 
     await connectDb()
     await seedInitialData()
