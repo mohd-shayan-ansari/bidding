@@ -59,6 +59,7 @@ function AppBidding() {
 
   const [bidForm, setBidForm] = useState(bidDefault)
   const [bidMessage, setBidMessage] = useState('')
+  const [tradePanelOpen, setTradePanelOpen] = useState(false)
 
   const [matchForm, setMatchForm] = useState(matchDefault)
   const [matchMessage, setMatchMessage] = useState('')
@@ -444,7 +445,13 @@ function AppBidding() {
             </div>
           </section>
 
-          <main className="content-grid">
+          {!tradePanelOpen && (
+            <button className="place-bid-trigger" onClick={() => setTradePanelOpen(true)}>
+              📊 Place Bid
+            </button>
+          )}
+
+          <main className="content-grid single-column">
             <section className="matches-list">
               {filteredMatches.map((match) => (
                 <article className="match-card" key={match.id}>
@@ -466,9 +473,16 @@ function AppBidding() {
                 </article>
               ))}
             </section>
+          </main>
 
-            <aside className="trade-panel">
-              <h2>Place Bid</h2>
+          {tradePanelOpen && (
+            <>
+              <div className="overlay" onClick={() => setTradePanelOpen(false)}></div>
+              <aside className="trade-panel trade-panel-overlay">
+                <div className="trade-panel-header">
+                  <h2>Place Bid</h2>
+                  <button type="button" className="close-panel" onClick={() => setTradePanelOpen(false)}>✕</button>
+                </div>
               <form onSubmit={placeBid}>
                 <label htmlFor="bidMatch">Match</label>
                 <select
@@ -513,8 +527,9 @@ function AppBidding() {
                 <button className="confirm" type="submit">Place Bid</button>
               </form>
               {bidMessage && <p className="muted">{bidMessage}</p>}
-            </aside>
-          </main>
+              </aside>
+            </>
+          )}
         </>
       )}
 
@@ -556,7 +571,7 @@ function AppBidding() {
       {activeView === 'Wallet' && (
         <section className="wallet-grid">
           <article className="wallet-card">
-            <h2>Wallet Topup (existing flow)</h2>
+            <h2>Wallet Topup</h2>
             <p className="wallet-amount">{formatCurrency(user.wallet)}</p>
             <div className="budget-overview">
               <div className="budget-meta-row">
